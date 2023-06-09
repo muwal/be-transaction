@@ -39,6 +39,36 @@ class TransactionController extends Controller
     {
     }
 
+    public function edit($id)
+    {
+        $transactions = Transaction::findOrFail($id);
+        $products = Product::findOrFail($transactions->id_products);
+        $types = Type::findOrFail($products->id_types);
+        $data = array(
+            'id' => $transactions->id,
+            'id_product' => $transactions->id_products,
+            'product' => $products->name,
+            'stock' => $products->stock,
+            'qty' => $transactions->qty,
+            'id_types' => $types->id,
+            'types' => $types->name,
+            'created_at' => $transactions->created_at,
+            'updated_at' => $transactions->updated_at,
+        );
+
+        if ($transactions) {
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => false,
+                'messages' => 'Record not found'
+            ], 404);
+        }
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make(
@@ -196,7 +226,7 @@ class TransactionController extends Controller
 
     public function search($name, Request $request)
     {
-        if ($name === null) {
+        if ($name === '') {
             $transactions = Transaction::all();
         } else {
             $transactions = Transaction::whereHas('products', function ($q) use ($name) {
@@ -206,15 +236,17 @@ class TransactionController extends Controller
         $arrTransaction = $this->serializeArticle($transactions, 'array');
 
         if ($arrTransaction) {
-            return response()->json([
+            $response = response()->json([
                 'success' => true,
                 'data' => $arrTransaction
             ], 200);
         } else {
-            return response()->json([
+            $response = response()->json([
                 'success' => true,
                 'data' => $arrTransaction
             ], 200);
         }
+
+        return $response;
     }
 }
