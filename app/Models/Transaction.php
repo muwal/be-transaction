@@ -11,4 +11,9 @@ class Transaction extends Model
 
     protected $table = 'transactions';
     protected $fillable = ['id_products', 'qty'];
+
+    public function products()
+    {
+        return $this->belongsTo(Product::class, 'id_products');
+    }
 }

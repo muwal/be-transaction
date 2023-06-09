@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('transaction', TransactionController::class);
 Route::get('product', [ProductController::class, 'getProduct']);
+Route::get('transaction/search/{name?}', [TransactionController::class, 'search']);

@@ -12,8 +12,13 @@ class Product extends Model
     protected $table = 'products';
     protected $fillable = ['stock'];
 
-    public function type()
+    public function types()
     {
         return $this->belongsTo(Type::class, 'foreign_key');
+    }
+
+    public function transactions()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 }

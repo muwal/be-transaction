@@ -193,4 +193,28 @@ class TransactionController extends Controller
         }
         return $data;
     }
+
+    public function search($name, Request $request)
+    {
+        if ($name === null) {
+            $transactions = Transaction::all();
+        } else {
+            $transactions = Transaction::whereHas('products', function ($q) use ($name) {
+                $q->where('name', 'LIKE', "%$name%");
+            })->get();
+        }
+        $arrTransaction = $this->serializeArticle($transactions, 'array');
+
+        if ($arrTransaction) {
+            return response()->json([
+                'success' => true,
+                'data' => $arrTransaction
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => true,
+                'data' => $arrTransaction
+            ], 200);
+        }
+    }
 }

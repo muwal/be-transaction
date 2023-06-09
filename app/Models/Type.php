@@ -11,7 +11,7 @@ class Type extends Model
 
     protected $table = 'types';
 
-    public function product()
+    public function products()
     {
         return $this->belongsTo(Product::class);
     }
